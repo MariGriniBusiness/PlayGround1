@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Favorite Color</title>
+    <style>
+      body {
+        font-family: system-ui, -apple-system, sans-serif;
+        padding: 2rem;
+        transition: background-color 200ms ease;
+      }
+      .row { display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; }
+      input, button { font-size: 1rem; padding: 0.5rem 0.75rem; }
+      .hint { opacity: 0.8; font-size: 0.95rem; margin-top: 0.75rem; }
+      .msg { margin-top: 0.75rem; font-weight: 600; }
+    </style>
+  </head>
+  <body>
+    <h1>Pick your favorite color</h1>
+
+    <div class="row">
+      <label for="color">Color:</label>
+      <input id="color" type="text" placeholder="e.g. rebeccapurple or #ffcc00" />
+      <button id="apply">Apply</button>
+      <button id="random">Random</button>
+    </div>
+
+    <div class="hint">
+      You can enter a CSS color name (e.g. <code>tomato</code>) or a hex code (e.g. <code>#00aaff</code>).
+    </div>
+
+    <div id="msg" class="msg"></div>
+
+    <script>
+      const input = document.getElementById("color");
+      const msg = document.getElementById("msg");
+
+      function setColor(value) {
+        document.body.style.backgroundColor = value;
+
+        // If the browser rejects the color, it won't apply it (computed style stays unchanged)
+        const applied = getComputedStyle(document.body).backgroundColor;
+        msg.textContent = `Tried: "${value}" → Applied: ${applied}`;
+      }
+
+      document.getElementById("apply").addEventListener("click", () => {
+        setColor(input.value.trim());
+      });
+
+      input.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") setColor(input.value.trim());
+      });
+
+      document.getElementById("random").addEventListener("click", () => {
+        const randomHex = "#" + Math.floor(Math.random() * 16777215).toString(16).padStart(6, "0");
+        input.value = randomHex;
+        setColor(randomHex);
+      });
+    </script>
+  </body>
+</html>
